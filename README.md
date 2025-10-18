@@ -135,13 +135,11 @@ pytest
 
 ---
 
-## 🪄 Preview
+## 🌐 Live Preview
 
-Here’s how your homepage looks ✨
+Take a quick look at the website design 👇
 
-<p align="center">
-  <img src="static/uploads/preview.png" alt="Website Screenshot" width="90%">
-</p>
+![Cake World Preview](static/preview.png)
 
 ---
 
