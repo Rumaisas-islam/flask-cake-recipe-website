@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake World 🍰</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='cake-icon.png') }}">
+
+  <!-- Global Styles -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: #fff5fa;
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      background: linear-gradient(90deg, #ff8dc7, #ffb8d9);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+
+    .logo {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: #d63384; /* changed to match pink theme */
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo span {
+      color: #d63384; /* same pink color for consistency */
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+      transition: 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffeef8;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .btn-logout {
+      background: #fff;
+      color: #d63384;
+      font-weight: 600;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .btn-logout:hover {
+      background: #ffe0ef;
+      color: #b30059;
+    }
+
+    /* ===== FLASH MESSAGES ===== */
+    .flash {
+      text-align: center;
+      padding: 12px;
+      margin: 15px auto;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 700px;
+      font-weight: 500;
+    }
+
+    .flash.success { background-color: #d4edda; color: #155724; }
+    .flash.error { background-color: #f8d7da; color: #721c24; }
+    .flash.warning { background-color: #fff3cd; color: #856404; }
+    .flash.info { background-color: #d1ecf1; color: #0c5460; }
+
+    /* ===== MAIN CONTENT ===== */
+    main {
+      flex: 1;
+      padding: 30px;
+      width: 90%;
+      max-width: 1300px;
+      margin: auto;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 15px 0;
+      background: #ffb8d9; /* softer matching tone */
+      color: #d63384; /* updated to match Cake World pink */
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-top: auto;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <a href="{{ url_for('index') }}" class="logo">🍰 <span>Cake World</span></a>
+
+    <div class="nav-right">
+      <div class="nav-links">
+        {% if 'username' in session %}
+          <a href="{{ url_for('index') }}">Home</a>
+          <a href="{{ url_for('add') }}">Add Recipe</a>
+          <a href="{{ url_for('search') }}">Search</a>
+        {% endif %}
+      </div>
+
+      {% if 'username' in session %}
+        <a href="{{ url_for('logout') }}" class="btn-logout">Logout</a>
+      {% else %}
+        <a href="{{ url_for('login') }}" class="btn-logout">Login</a>
+      {% endif %}
+    </div>
+  </nav>
+
+  <!-- FLASH MESSAGES -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- MAIN CONTENT -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025 <span>Cake World</span> | Crafted with ❤️ for Dessert Lovers
+  </footer>
+
+</body>
+</html>

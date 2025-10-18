@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search | Cake World</title>
+  <style>
+    body {
+      background-color: #ffe6f2;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(90deg,#ff8dc7, #ffb8d9);
+      color: #d63384;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      font-size: 1.4rem;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .nav-left {
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+
+    .nav-right a {
+      text-decoration: none;
+      color: white;
+      margin-left: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: 0.3s ease;
+    }
+
+    .nav-right a:hover {
+      color: #ffeef8;
+    }
+
+    /* ===== SEARCH SECTION ===== */
+    .search-section {
+      text-align: center;
+      margin: 50px auto 30px;
+    }
+
+    .search-section h2 {
+      color: #d63384;
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .search-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box input {
+      width: 400px;
+      max-width: 80%;
+      padding: 12px 18px;
+      border: 2px solid #ff8dc7;
+      border-radius: 50px;
+      font-size: 1rem;
+      outline: none;
+      color: #333;
+    }
+
+    .search-box button {
+      background-color: #d63384;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s ease;
+    }
+
+    .search-box button:hover {
+      background-color: #ff4fa3;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .card-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      justify-content: center;
+      padding: 30px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-grow: 1;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+      text-align: center;
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 360px;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #d63384;
+      margin: 10px 0 5px;
+    }
+
+    .card .details {
+      font-size: 0.85rem;
+      padding: 0 15px;
+      color: #333;
+      text-align: left;
+    }
+
+    .card a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #d63384;
+      transition: color 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .card a:hover {
+      color: #ff4fa3;
+    }
+
+    .card-actions {
+      padding-bottom: 10px;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: linear-gradient(90deg, #ff8dc7, #ffb8d9);
+      text-align: center;
+      color: #d63384;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-top: auto;
+    }
+
+    @media (max-width: 576px) {
+      header {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .search-box {
+        flex-direction: column;
+      }
+
+      .search-box input {
+        width: 90%;
+      }
+
+      .search-box button {
+        width: 50%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== HEADER ===== -->
+  <header>
+    <div class="nav-left">🍰 Cake World</div>
+    <div class="nav-right">
+      <a href="/index">Home</a>
+      <a href="/add">Add Recipe</a>
+      <a href="/search">Search</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <!-- ===== SEARCH SECTION ===== -->
+  <section class="search-section">
+    <h2>🍰 Search Our Delicious Recipes</h2>
+    <form method="POST" action="/search" class="search-box">
+      <input type="text" name="keyword" placeholder="Search by title..." required>
+      <button type="submit">Search</button>
+    </form>
+  </section>
+
+  <!-- ===== SEARCH RESULTS ===== -->
+  {% if recipes %}
+  <div class="card-container">
+    {% for recipe in recipes %}
+    <div class="card">
+      <img src="{{ url_for('static', filename='uploads/' + (recipe.image if recipe.image else 'default.jpg')) }}" alt="{{ recipe.title }}">
+      <div class="details">
+        <h3>{{ recipe.title }}</h3>
+        <p><strong>Ingredients:</strong> {{ recipe.ingredients }}</p>
+        <p><strong>Recipe:</strong> {{ recipe.recipe[:60] }}...</p>
+      </div>
+      <div class="card-actions">
+        <a href="/view_recipe/{{ recipe.id }}">View More</a><br>
+        <a href="/update/{{ recipe.id }}">Edit</a> |
+        <a href="/delete/{{ recipe.id }}" style="color:red;">Delete</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% elif query %}
+  <h3 style="text-align:center; color:#d63384; margin-top:40px;">No recipes found for "<strong>{{ query }}</strong>" 😢</h3>
+  {% endif %}
+
+  <!-- ===== FOOTER ===== -->
+  <footer>© 2025 Cake World. All Rights Reserved. 🍰</footer>
+</body>
+</html>
